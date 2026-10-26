@@ -14,9 +14,9 @@ IPAddress subnet(255, 255, 255, 0);
 // .........................................................................
 #define   Home_EndPoint               "/"
 #define   Live_Camera_EndPoint        "/stream"
-#define   Led_Control_EndPoint        "/api/led"
-#define   Hotspot_EndPoint            "/api/hotspot"
-#define   Restart_EndPoint            "/api/restart"
+#define   Led_Control_EndPoint        "/led"
+#define   Hotspot_EndPoint            "/hotspot"
+#define   Restart_Board_EndPoint      "/restart-board"
 // .........................................................................
 void handleLedApi() {
   Control_Server.sendHeader("Access-Control-Allow-Origin", "*");
@@ -320,5 +320,37 @@ void handleStream() {
   client.stop();
 }
 // .........................................................................
+void handleRestartApi()
+{
+  Control_Server.sendHeader("Access-Control-Allow-Origin", "*");
+
+  if (Control_Server.method() == HTTP_OPTIONS) {
+    Control_Server.sendHeader(
+      "Access-Control-Allow-Methods",
+      "POST, OPTIONS"
+    );
+    Control_Server.sendHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type"
+    );
+    Control_Server.send(204);
+    return;
+  }
+
+  if (Control_Server.method() != HTTP_POST) {
+    Control_Server.sendHeader("Allow", "POST, OPTIONS");
+    Control_Server.send(405, "application/json",
+                        "{\"ok\":false,\"error\":\"Use POST\"}");
+    return;
+  }
+
+  Control_Server.send(
+    200,
+    "application/json",
+    "{\"ok\":true,\"message\":\"Restarting\"}"
+  );
+  delay(300);
+  Restart_Board();
+}
 // .........................................................................
 // .........................................................................
