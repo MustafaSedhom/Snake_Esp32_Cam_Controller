@@ -2,10 +2,15 @@
 #pragma once
 // .........................................................................
 #include "Imports.h"
+#include "Board_Config.h"
 // .........................................................................
 // .........................................................................
 WebServer Camera_Server(80);        // Camera stream Server
 WebServer Control_Server(81);       // Control Server
+// .........................................................................
+IPAddress localIP(192, 168, 66, 11);
+IPAddress gateway(192, 168, 66, 11);
+IPAddress subnet(255, 255, 255, 0);
 // .........................................................................
 #define   Home_EndPoint               "/"
 #define   Live_Camera_EndPoint        "/stream"
@@ -251,13 +256,13 @@ void handleRoot() {
     <html>
     <head>
       <meta name="viewport" content="width=device-width,initial-scale=1">
-      <title>ESP32-CAM Live Stream Robotics & SEDHOM </title>
+      <title>Snake</title>
       <style>
         body {
           font-family: Arial, sans-serif;
           text-align: center;
-          background: #111;
-          color: #07cee0;
+          background: #141414;
+          color: #02e6fb;
           margin: 1rem;
         }
 
@@ -265,12 +270,12 @@ void handleRoot() {
           width: 100%;
           max-width: 800px;
           height: auto;
-          border: 1px solid #15ff00;
+          border: 5px solid #969695;
         }
       </style>
     </head>
     <body>
-      <h2>ESP32-CAM Live Stream</h2>
+      <h2>Snake ESP32-CAM Live Stream Robotics & SEDHOM </h2>
       <img src="/stream" alt="Live camera stream">
     </body>
     </html>

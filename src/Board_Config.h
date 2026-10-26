@@ -3,6 +3,10 @@
 // ............................................................................
 #include "Imports.h"
 // ............................................................................
+// AI-Thinker ESP32-CAM hotspot defaults
+String apSsid = "ESP32-CAM";
+String apPassword = "1234567890";
+// ............................................................................
 // se pins for setting cam with esp32-s
 #define PWDN_GPIO_NUM     32
 #define RESET_GPIO_NUM    -1
