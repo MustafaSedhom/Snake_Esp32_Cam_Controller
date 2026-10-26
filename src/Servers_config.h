@@ -2,37 +2,39 @@
 #pragma once
 // .........................................................................
 #include "Imports.h"
+#include "APIs_config.h"
 // .........................................................................
-WebServer server(80);        // Camera page and stream
-WebServer controlServer(81); // LED and hotspot APIs
-// .........................................................................
-void handleRoot(void);
-void handleStream(void);
-
-void handleLedApi(void);
-
-void handleHotspotApi(void);
 // .........................................................................
 void Setup_Servers()
 {
-    server.on("/", HTTP_GET, handleRoot);
-    server.on("/stream", HTTP_GET, handleStream);
-    server.begin();
+    Camera_Server.on(Home_EndPoint, HTTP_GET, handleRoot);
+    Camera_Server.on(Live_Camera_EndPoint, HTTP_GET, handleStream);
+    Camera_Server.begin();
 
-    controlServer.on("/api/led", HTTP_GET, handleLedApi);
-    controlServer.on("/api/led", HTTP_POST, handleLedApi);
-    controlServer.on("/api/led", HTTP_OPTIONS, handleLedApi);
+    Control_Server.on(Led_Control_EndPoint, HTTP_GET, handleLedApi);
+    Control_Server.on(Led_Control_EndPoint, HTTP_POST, handleLedApi);
 
-    controlServer.on("/api/hotspot", HTTP_GET, handleHotspotApi);
-    controlServer.on("/api/hotspot", HTTP_POST, handleHotspotApi);
-    controlServer.on("/api/hotspot", HTTP_OPTIONS, handleHotspotApi);
-    controlServer.begin();
+    Control_Server.on(Hotspot_EndPoint, HTTP_GET, handleHotspotApi);
+    Control_Server.on(Hotspot_EndPoint, HTTP_POST, handleHotspotApi);
+    Control_Server.begin();
 }
 // .........................................................................
-void Handling_Severs()
+void cameraServerTask(void *parameter)
 {
-    server.handleClient();
-    delay(2);
+  for (;;)
+  {
+    Camera_Server.handleClient();  // Camera stream Server handler
+    vTaskDelay(pdMS_TO_TICKS(1));
+  }
+}
+// .........................................................................
+void controlServerTask(void *parameter)
+{
+  for (;;)
+  {
+    Control_Server.handleClient();  // control Server handler
+    vTaskDelay(pdMS_TO_TICKS(1));
+  }
 }
 // .........................................................................
 // .........................................................................
